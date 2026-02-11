@@ -37,7 +37,7 @@ export const StaffListColumns = (openStaffDetail: (id: number) => void, openMode
         title: 'สาขา',
         dataIndex: 'staff_shop',
         key: 'staff_shop',
-        width: 200,
+        width: 250,
         align: 'center',
         render: (text: string) => (
             <span style={{ whiteSpace: 'nowrap' }}>{text}</span>
@@ -47,6 +47,7 @@ export const StaffListColumns = (openStaffDetail: (id: number) => void, openMode
         title: "สถานะ",
         dataIndex: "staff_status",
         key: "staff_status",
+        width: 200,
         align: "center",
         render: (value: "Y" | "N") => (
             <Tag color={value === "Y" ? "green" : "red"}>
@@ -148,6 +149,7 @@ export const StaffListColumns = (openStaffDetail: (id: number) => void, openMode
         title: "ล็อกหลังเลิกงาน",
         dataIndex: "staff_lock_status",
         key: "staff_lock_status",
+        width: 200,
         align: "center",
         render: (value: "Y" | "N") => (
             <Tag color={value === "Y" ? "red" : "green"}>

@@ -1,3 +1,10 @@
+export interface ResponseStaffListType {
+    status: boolean,
+    message: string,
+    data: StaffListType[],
+    total: number
+}
+
 export interface StaffListType {
     staff_username: string;
     staff_id: number;

@@ -1,50 +1,55 @@
 "use client"
 
-import { StaffListType } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
+import { ResponseStaffListType, StaffListType } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
 import { RedoOutlined, SearchOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Empty, Form, Input, Modal, Row, Table, Typography } from "antd"
 import { StaffListColumns } from "./columns/staff.List.Columns";
 import { useState } from "react";
+import { getDataStaffList } from "@/services/staff.service";
+import StaffDetailDrawer from "../staff-detail/page";
 
 export default function StaffListPage() {
 
     const [form] = Form.useForm();
-
-    const generateMockData = (count: number): StaffListType[] => {
-        return Array.from({ length: count }, (_, index) => {
-            const id = index + 1;
-
-            return {
-                staff_username: `user${id}`,
-                staff_id: id,
-                em_code: `EM${String(id).padStart(7, "0")}`,
-                staff_shop: "HQP สำนักงานใหญ่ (บริษัท)",
-                staff_status: id % 2 === 0 ? "Y" : "N",
-                staff_national: `${1000000000000 + id}`,
-                staff_name: `พนักงาน ${id}`,
-                staff_nickname: `Nick${id}`,
-                staff_start_date: "01/01/2020",
-                staff_end_date: null,
-                staff_type_work: "ฟรีแลนซ์",
-                staff_department: `แผนก ${((id % 5) + 1)}`,
-                staff_bank_name: "กรุงเทพ จำกัด (มหาชน)",
-                staff_bank_number: `${1000000000 + id}`,
-                staff_lock_status: id % 3 === 0 ? "Y" : "N",
-                user_person: "ADMIN SYSTEM",
-            };
-        });
-    };
-
-    const [data, setData] = useState<StaffListType[]>(() =>
-        generateMockData(150)
-    );
-
-
     const [openModelsDelect, setOpenModelsDelect] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
+    const [dataStaffList, setDataStaffList] = useState<StaffListType[]>([]);
+
+    const [openDrawerStaffDetail, setOpenDreawerStaffDetail] = useState(false);
+    const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null);
+
+    const fetchDataStaffList = async () => {
+        try {
+            const [dataSelectRepairStock] = await Promise.all([getDataStaffList() as Promise<ResponseStaffListType>])
+
+            switch (dataSelectRepairStock.status) {
+                case true:
+                    if (dataSelectRepairStock.data.length === 0) {
+                        console.log("ไม่พบข้อมูล")
+                        setDataStaffList(dataSelectRepairStock.data)
+                        return dataSelectRepairStock.data
+                    }
+                case false:
+                    setDataStaffList(dataSelectRepairStock.data)
+                    return dataSelectRepairStock.data
+            }
+        } catch (error) {
+            console.log("error", error)
+            return error
+        } finally {
+            console.log("FINI")
+        }
+    }
+
 
     const handleOpenStaffDetail = (staff_id: number) => {
-        console.log("Open staff_id:", staff_id);
+        setSelectedStaffId(staff_id);
+        setOpenDreawerStaffDetail(true);
+    };
+
+    const handleClose = () => {
+        setOpenDreawerStaffDetail(false);
+        setSelectedStaffId(null);
     };
 
     const handleOpenModelsDelectStaff = (staff_id: number) => {
@@ -56,7 +61,7 @@ export default function StaffListPage() {
     const handleDeleteConfirm = () => {
         if (selectedId === null) return;
 
-        setData(prev => prev.filter(item => item.staff_id !== selectedId));
+        setDataStaffList(prev => prev.filter(item => item.staff_id !== selectedId));
         setOpenModelsDelect(false);
         setSelectedId(null);
     };
@@ -93,6 +98,7 @@ export default function StaffListPage() {
                                             type="primary"
                                             style={{ width: "100%" }}
                                             icon={<SearchOutlined />}
+                                            onClick={fetchDataStaffList}
                                         />
                                     </Form.Item>
                                 </Col>
@@ -111,7 +117,7 @@ export default function StaffListPage() {
                         <Col xs={24} sm={24} md={24}>
                             <Table<StaffListType>
                                 columns={StaffListColumns(handleOpenStaffDetail, handleOpenModelsDelectStaff)}
-                                dataSource={data}
+                                dataSource={dataStaffList}
                                 size="small"
                                 rowKey={record => record.staff_id}
                                 scroll={{ y: 'calc(100vh - 400px)', x: 'max-content' }}
@@ -144,9 +150,15 @@ export default function StaffListPage() {
                 }}
             >
                 <Typography>
-                    ต้องการลบข้อมูลพนักงาน : {data.find(item => item.staff_id === selectedId)?.staff_name}
+                    ต้องการลบข้อมูลพนักงาน : {dataStaffList.find(item => item.staff_id === selectedId)?.staff_name}
                 </Typography>
             </Modal>
+            <StaffDetailDrawer
+                open={openDrawerStaffDetail}
+                onClose={handleClose}
+                staff_id={selectedStaffId}
+                onRefresh={fetchDataStaffList}
+            />
         </>
     )
 }
