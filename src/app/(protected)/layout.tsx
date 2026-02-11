@@ -68,12 +68,12 @@ export default function ProtectedLayout({
               children: [
                 {
                   key: "/staff",
-                  label: "รายชื่อพนักงาน",
+                  label: "ข้อมูลพนักงาน",
                   onClick: () => router.push("/staff/staff-list"),
                 },
                 {
                   key: "/staff/create",
-                  label: "เพิ่มพนักงาน",
+                  label: "ประวัติการสแกนนิ้ว",
                   onClick: () => router.push("/staff/staff-create"),
                 },
               ],
