@@ -1,8 +1,8 @@
 "use client"
 
 import { ResponseStaffListType, StaffListType } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
-import { RedoOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Empty, Form, Input, Modal, Row, Table, Typography } from "antd"
+import { RedoOutlined, SearchOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Button, Card, Col, Empty, Form, Input, Modal, Row, Select, Table, Typography } from "antd"
 import { StaffListColumns } from "./columns/staff.List.Columns";
 import { useState } from "react";
 import { getDataStaffList } from "@/services/staff.service";
@@ -41,7 +41,6 @@ export default function StaffListPage() {
         }
     }
 
-
     const handleOpenStaffDetail = (staff_id: number) => {
         setSelectedStaffId(staff_id);
         setOpenDreawerStaffDetail(true);
@@ -66,7 +65,6 @@ export default function StaffListPage() {
         setSelectedId(null);
     };
 
-
     return (
         <>
             <Form form={form} layout="vertical">
@@ -81,13 +79,119 @@ export default function StaffListPage() {
                             </Form.Item>
                         </Col>
                         <Col xs={24} sm={12} md={2}>
+                            <Form.Item name="em_code">
+                                <Input placeholder="กรอก EM Code" allowClear />
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={12} md={3}>
+                            <Form.Item name="shop_id" style={{ margin: 0, padding: 0 }}>
+                                <Select
+                                    showSearch
+                                    style={{ width: "100%" }}
+                                    placeholder="สาขาหลัก"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        (option?.children as unknown as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                    // onChange={handleSearchSelectShop}
+                                >
+                                    {/* {dataSelectShop.map((item) => (
+                                        <Select.Option key={item.Id} value={item.Id}>
+                                            {item.Name}
+                                        </Select.Option>
+                                    ))} */}
+                                    <Select.Option value="0">ทั้งหมด</Select.Option>
+                                    <Select.Option value="1">SHOP-1</Select.Option>
+                                    <Select.Option value="2">SHOP-2</Select.Option>
+                                    <Select.Option value="3">SHOP-3</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={12} md={2}>
                             <Form.Item name="name">
                                 <Input placeholder="กรอกชื่อพนักงาน" allowClear />
                             </Form.Item>
                         </Col>
                         <Col xs={24} sm={12} md={2}>
-                            <Form.Item name="em_code">
-                                <Input placeholder="กรอก EM Code" allowClear />
+                            <Form.Item name="staff_status" style={{ margin: 0, padding: 0 }}>
+                                <Select
+                                    showSearch
+                                    style={{ width: "100%" }}
+                                    placeholder="สถานะ"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        (option?.children as unknown as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                    // onChange={handleSearchSelectShop}
+                                >
+                                    {/* {dataSelectShop.map((item) => (
+                                        <Select.Option key={item.Id} value={item.Id}>
+                                            {item.Name}
+                                        </Select.Option>
+                                    ))} */}
+                                    <Select.Option value="ALL">ทั้งหมด</Select.Option>
+                                    <Select.Option value="Y">เปิดใช้งาน</Select.Option>
+                                    <Select.Option value="N">ปิดใช้งาน</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={12} md={2}>
+                            <Form.Item name="staff_type" style={{ margin: 0, padding: 0 }}>
+                                <Select
+                                    showSearch
+                                    style={{ width: "100%" }}
+                                    placeholder="ประเภทพนักงาน"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        (option?.children as unknown as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                    // onChange={handleSearchSelectShop}
+                                >
+                                    {/* {dataSelectShop.map((item) => (
+                                        <Select.Option key={item.Id} value={item.Id}>
+                                            {item.Name}
+                                        </Select.Option>
+                                    ))} */}
+                                    <Select.Option value="ALL">ทั้งหมด</Select.Option>
+                                    <Select.Option value="W">งานประจำ</Select.Option>
+                                    <Select.Option value="F">ฟรีแลช์</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} sm={12} md={3}>
+                            <Form.Item name="staff_department" style={{ margin: 0, padding: 0 }}>
+                                <Select
+                                    showSearch
+                                    style={{ width: "100%" }}
+                                    placeholder="แผนก"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) =>
+                                        (option?.children as unknown as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                    // onChange={handleSearchSelectShop}
+                                >
+                                    {/* {dataSelectShop.map((item) => (
+                                        <Select.Option key={item.Id} value={item.Id}>
+                                            {item.Name}
+                                        </Select.Option>
+                                    ))} */}
+                                    <Select.Option value="ALL">ทั้งหมด</Select.Option>
+                                    <Select.Option value="sale">แผนกบัญชี</Select.Option>
+                                    <Select.Option value="Mechanic">แผนกช่าง</Select.Option>
+                                    <Select.Option value="Finance">แผนกการเงิน</Select.Option>
+                                    <Select.Option value="menager">แผนกบริหาร</Select.Option>
+                                    <Select.Option value="HR">แผนกทรัพยากรบุคคล</Select.Option>
+                                    <Select.Option value="Warehouse">แผนกคลังซ่อม</Select.Option>
+                                    <Select.Option value="IT">แผนก IT </Select.Option>
+                                </Select>
                             </Form.Item>
                         </Col>
                         <Col xs={2} sm={2} md={2}>
@@ -96,7 +200,7 @@ export default function StaffListPage() {
                                     <Form.Item>
                                         <Button
                                             type="primary"
-                                            style={{ width: "100%" }}
+                                            style={{ width: "100%", backgroundColor: "#1677FF" }}
                                             icon={<SearchOutlined />}
                                             onClick={fetchDataStaffList}
                                         />
@@ -105,18 +209,35 @@ export default function StaffListPage() {
                                 <Col span={12}>
                                     <Form.Item>
                                         <Button
-                                            style={{ width: "100%" }}
+                                            style={{ width: "100%", backgroundColor: "#8C8C8C" }}
                                             icon={<RedoOutlined />}
                                         />
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
+                        <Col xs={14} sm={14} md={2}></Col>
+                        <Col xs={2} sm={2} md={2}>
+                            <Button
+                                type="primary"
+                                style={{ width: "100%", backgroundColor: "#1677FF" }}
+                                
+                                onClick={() => handleOpenStaffDetail(0)}
+                                icon={<UserAddOutlined />}
+                            >เพิ่มพนักงาน</Button>
+                        </Col>
+                        <Col xs={2} sm={2} md={2}>
+                            <Button
+                                type="primary"
+                                style={{ width: "100%", backgroundColor: "#722ED1" }}
+                                icon={<UserAddOutlined />}
+                            >Export</Button>
+                        </Col>
                     </Row>
                     <Row>
                         <Col xs={24} sm={24} md={24}>
                             <Table<StaffListType>
-                                columns={StaffListColumns(handleOpenStaffDetail, handleOpenModelsDelectStaff)}
+                                columns={StaffListColumns(handleOpenModelsDelectStaff)}
                                 dataSource={dataStaffList}
                                 size="small"
                                 rowKey={record => record.staff_id}
@@ -129,6 +250,9 @@ export default function StaffListPage() {
                                 locale={{
                                     emptyText: <Empty description="ไม่พบรายการ" />
                                 }}
+                                onRow={(record) => ({
+                                    onClick: () => handleOpenStaffDetail(record.staff_id),
+                                })}
                             />
                         </Col>
                     </Row>
@@ -157,7 +281,6 @@ export default function StaffListPage() {
                 open={openDrawerStaffDetail}
                 onClose={handleClose}
                 staff_id={selectedStaffId}
-                onRefresh={fetchDataStaffList}
             />
         </>
     )

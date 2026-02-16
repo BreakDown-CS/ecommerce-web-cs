@@ -6,7 +6,6 @@ import {
   MenuUnfoldOutlined,
   HomeOutlined,
   FileTextOutlined,
-  SettingOutlined,
 } from "@ant-design/icons"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -46,6 +45,7 @@ export default function ProtectedLayout({
             paddingLeft: collapsed ? 0 : 16,
             fontWeight: "bold",
             fontSize: 18,
+            color: "#1F1F1F",
           }}
         >
           {collapsed ? "DB-CS" : "BrackDownCS"}
