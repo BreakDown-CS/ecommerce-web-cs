@@ -96,7 +96,7 @@ return (
         }
         open={open}
         onClose={onClose}
-        width={900}
+        size="large"
     >
         <Form layout='vertical' form={form} id='myForm'>
             <Row>

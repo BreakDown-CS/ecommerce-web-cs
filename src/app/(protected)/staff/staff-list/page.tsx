@@ -1,6 +1,6 @@
 "use client"
 
-import { ResponseStaffListType, StaffListType } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
+import { SearchStaffList, StaffListType } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
 import { RedoOutlined, SearchOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Empty, Form, Input, Modal, Row, Select, Table, Typography } from "antd"
 import { StaffListColumns } from "./columns/staff.List.Columns";
@@ -14,30 +14,21 @@ export default function StaffListPage() {
     const [openModelsDelect, setOpenModelsDelect] = useState(false);
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [dataStaffList, setDataStaffList] = useState<StaffListType[]>([]);
-
     const [openDrawerStaffDetail, setOpenDreawerStaffDetail] = useState(false);
     const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null);
 
+    const [dataSearchStaffList, setDataSearchStaffList] = useState<SearchStaffList>({});
+
     const fetchDataStaffList = async () => {
         try {
-            const [dataSelectRepairStock] = await Promise.all([getDataStaffList() as Promise<ResponseStaffListType>])
+            const resultStaffList = await getDataStaffList(dataSearchStaffList);
 
-            switch (dataSelectRepairStock.status) {
-                case true:
-                    if (dataSelectRepairStock.data.length === 0) {
-                        console.log("ไม่พบข้อมูล")
-                        setDataStaffList(dataSelectRepairStock.data)
-                        return dataSelectRepairStock.data
-                    }
-                case false:
-                    setDataStaffList(dataSelectRepairStock.data)
-                    return dataSelectRepairStock.data
-            }
+            console.log("SS : ", resultStaffList);
+
         } catch (error) {
-            console.log("error", error)
-            return error
+            console.error("Fetch Error:", error);
         } finally {
-            console.log("FINI")
+            console.log("FINI");
         }
     }
 
@@ -65,6 +56,14 @@ export default function StaffListPage() {
         setSelectedId(null);
     };
 
+    const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+
+        console.log("name : ", name, "value : ", value);
+        setDataSearchStaffList(prev => ({ ...prev, [name]: value }))
+        ;
+    }
+
     return (
         <>
             <Form form={form} layout="vertical">
@@ -74,28 +73,32 @@ export default function StaffListPage() {
                     </Typography.Title>
                     <Row gutter={[16, 16]}>
                         <Col xs={24} sm={12} md={2}>
-                            <Form.Item name="staff_id">
-                                <Input placeholder="กรอกรหัสพนักงาน" allowClear />
+                            <Form.Item>
+                                <Input
+                                    name="staff_id"
+                                    placeholder="กรอกรหัสพนักงาน"
+                                    onChange={handleChangeInput}
+                                    allowClear
+                                />
                             </Form.Item>
                         </Col>
                         <Col xs={24} sm={12} md={2}>
-                            <Form.Item name="em_code">
-                                <Input placeholder="กรอก EM Code" allowClear />
+                            <Form.Item>
+                                <Input 
+                                    name="em_code"
+                                    placeholder="กรอก EM Code"
+                                    onChange={handleChangeInput}
+                                    allowClear 
+                                />
                             </Form.Item>
                         </Col>
                         <Col xs={24} sm={12} md={3}>
-                            <Form.Item name="shop_id" style={{ margin: 0, padding: 0 }}>
+                            <Form.Item name="shop_code" style={{ margin: 0, padding: 0 }}>
                                 <Select
                                     showSearch
                                     style={{ width: "100%" }}
                                     placeholder="สาขาหลัก"
-                                    optionFilterProp="children"
-                                    filterOption={(input, option) =>
-                                        (option?.children as unknown as string)
-                                            .toLowerCase()
-                                            .includes(input.toLowerCase())
-                                    }
-                                    // onChange={handleSearchSelectShop}
+                                // onChange={handleSearchSelectShop}
                                 >
                                     {/* {dataSelectShop.map((item) => (
                                         <Select.Option key={item.Id} value={item.Id}>
@@ -110,7 +113,7 @@ export default function StaffListPage() {
                             </Form.Item>
                         </Col>
                         <Col xs={24} sm={12} md={2}>
-                            <Form.Item name="name">
+                            <Form.Item name="staff_name">
                                 <Input placeholder="กรอกชื่อพนักงาน" allowClear />
                             </Form.Item>
                         </Col>
@@ -126,7 +129,7 @@ export default function StaffListPage() {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    // onChange={handleSearchSelectShop}
+                                // onChange={handleSearchSelectShop}
                                 >
                                     {/* {dataSelectShop.map((item) => (
                                         <Select.Option key={item.Id} value={item.Id}>
@@ -151,7 +154,7 @@ export default function StaffListPage() {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    // onChange={handleSearchSelectShop}
+                                // onChange={handleSearchSelectShop}
                                 >
                                     {/* {dataSelectShop.map((item) => (
                                         <Select.Option key={item.Id} value={item.Id}>
@@ -159,8 +162,8 @@ export default function StaffListPage() {
                                         </Select.Option>
                                     ))} */}
                                     <Select.Option value="ALL">ทั้งหมด</Select.Option>
-                                    <Select.Option value="W">งานประจำ</Select.Option>
-                                    <Select.Option value="F">ฟรีแลช์</Select.Option>
+                                    <Select.Option value="regular">งานประจำ</Select.Option>
+                                    <Select.Option value="freelance">ฟรีแลช์</Select.Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -176,7 +179,7 @@ export default function StaffListPage() {
                                             .toLowerCase()
                                             .includes(input.toLowerCase())
                                     }
-                                    // onChange={handleSearchSelectShop}
+                                // onChange={handleSearchSelectShop}
                                 >
                                     {/* {dataSelectShop.map((item) => (
                                         <Select.Option key={item.Id} value={item.Id}>
@@ -221,7 +224,7 @@ export default function StaffListPage() {
                             <Button
                                 type="primary"
                                 style={{ width: "100%", backgroundColor: "#1677FF" }}
-                                
+
                                 onClick={() => handleOpenStaffDetail(0)}
                                 icon={<UserAddOutlined />}
                             >เพิ่มพนักงาน</Button>

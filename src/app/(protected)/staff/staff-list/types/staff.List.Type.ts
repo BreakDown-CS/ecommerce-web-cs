@@ -1,5 +1,16 @@
 import { Dayjs } from 'dayjs'
 
+export interface SearchStaffList {
+    staff_id?: number,
+    em_code?: string
+    shop_code?: number
+    staff_name?: string
+    staff_status?: 'Y' | 'N'
+    staff_type_work?: string
+    staff_type?: string
+    staff_department?: string
+}
+
 export interface ResponseStaffListType {
     status: boolean,
     message: string,
