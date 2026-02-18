@@ -1,6 +1,19 @@
 import { ResponseStaffListType, SearchStaffList } from "@/app/(protected)/staff/staff-list/types/staff.List.Type"
 import { warehouseAxios } from "@/config/axios"
 
+export const createStaffDetail = async (payload: object) => {
+    const response = await warehouseAxios.post('/api/staff/createStaff', payload);
+
+    return response
+}
+
+export const updateStaffDetail = async (payload: object, staff_id: number) => {
+    const response = await warehouseAxios.post('/api/staff/updateStaff', { payload, staff_id });
+
+    return response
+}
+
+
 export const getDataStaffList = async (dataSearchStaffList: SearchStaffList): Promise<ResponseStaffListType> => {
     try {
         const response = await warehouseAxios.post(

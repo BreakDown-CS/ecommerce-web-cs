@@ -1,0 +1,37 @@
+import { DataStaffDetailValues } from "@/app/(protected)/staff/staff-list/types/staff.List.Type";
+
+export const mapToStaffPayload = (values: DataStaffDetailValues) => ({
+    username: values.username,
+    password: values.password,
+    staff_status: values.staff_status,
+    staff_shop: values.staff_shop,
+    staff_type: values.staff_type,
+    staff_department: values.staff_department,
+    staff_name: values.staff_name,
+    staff_phone: values.staff_phone,
+    staff_mail: values.staff_mail,
+    start_date: values.start_date?.toISOString() ?? null,
+    end_date: values.end_date?.toISOString() ?? undefined,
+    staff_birthday: values.staff_birthday?.toISOString() ?? undefined,
+    barcode: values.barcode ?? undefined,
+    em_code: values.em_code ?? undefined,
+    id_card: values.id_card ?? undefined,
+    staff_nickname: values.staff_nickname ?? undefined,
+    staff_group_page: values.staff_group_page ?? undefined,
+    staff_line: values.staff_line ?? undefined,
+    staff_time_work: values.staff_time_work ?? undefined,
+    staff_device: values.staff_device ?? undefined,
+    staff_lock: values.staff_lock ?? undefined,
+    child: values.child ?? undefined,
+    staff_bank_id: values.staff_bank_id ?? undefined,
+    staff_bank: values.staff_bank ?? undefined,
+    staff_address: values.staff_address ?? undefined,
+    staff_road: values.staff_road ?? undefined,
+    staff_district_1: values.staff_district_1 ?? undefined,
+    staff_district_2: values.staff_district_2 ?? undefined,
+    staff_province: values.staff_province ?? undefined,
+    staff_zip: values.staff_zip ?? undefined,
+    staff_address_detail: values.staff_address_detail ?? undefined,
+});
+
+
